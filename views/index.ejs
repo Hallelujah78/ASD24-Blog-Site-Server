@@ -35,7 +35,14 @@
 
             <!-- pagination below here -->
             <div class="pagination-container">
-                pagination
+                <!-- render the page numbers -->
+                <% for(let i=1; i<=Math.ceil(totalPosts/numPostsPerPage); i++){ %>
+                    <a href="/?pagenum=<%=i%>">
+                        <button>
+                            <%= i%>
+                        </button>
+                    </a>
+                    <% } %>
             </div>
 
 

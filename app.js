@@ -46,7 +46,9 @@ app.get("/", (req, res) => {
   else pagenum = req.query.pagenum;
   console.log(req.query.pagenum);
   res.render("index.ejs", {
+    numPostsPerPage: numPostsPerPage,
     blogPosts: getDisplayPosts(numPostsPerPage, pagenum, blogPosts),
+    totalPosts: blogPosts.length,
   });
 });
 
