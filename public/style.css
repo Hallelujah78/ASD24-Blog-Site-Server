@@ -2,3 +2,9 @@
     width: 100%;
     border: red solid 1px;
 }
+
+.active-page {
+    transform: scale(1.05);
+    color: blue;
+    background-color: white;
+}
