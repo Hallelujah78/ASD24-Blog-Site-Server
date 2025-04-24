@@ -34,16 +34,38 @@
         <% }) %>
 
             <!-- pagination below here -->
-            <div class="pagination-container">
-                <!-- render the page numbers -->
-                <% for(let i=1; i<=Math.ceil(totalPosts/numPostsPerPage); i++){ %>
-                    <a href="/?pagenum=<%=i%>">
-                        <button>
-                            <%= i%>
-                        </button>
-                    </a>
-                    <% } %>
-            </div>
+            <nav class="pagination-container">
+                <% if(pagenum==1){ %>
+                    <a href="/?pagenum=<%= pagenum-1%>"><button disabled id="previous-page">Previous</button></a>
+
+                    <% } else { %>
+                        <a href="/?pagenum=<%= pagenum-1%>" disabled><button id="previous-page">Previous</button></a>
+                        <% }%>
+
+
+                            <%let pageOffset=Math.ceil(totalPosts/numPostsPerPage)%>
+                                <% let start=pagenum - Math.floor(numPagesToDisplay/2)%>
+                                    <% let end=pagenum + Math.floor(numPagesToDisplay/2) <=pageOffset ?
+                                        pagenum+Math.floor(numPagesToDisplay/2):pageOffset%>
+                                        <!-- render the page numbers -->
+                                        <% for(let i=start>=1?start:1; i<=end ; i++){ %>
+                                                <a href="/?pagenum=<%=i%>">
+                                                    <button>
+                                                        <%= i%>
+                                                    </button>
+                                                </a>
+                                                <% } %>
+
+                                                    <% if(pagenum==pageOffset){ %>
+                                                        <a href="/?pagenum=<%= pagenum+1%>"><button disabled
+                                                                id="next-page">Next</button></a>
+
+                                                        <% } else { %>
+                                                            <a href="/?pagenum=<%= pagenum+1%>"><button
+                                                                    id="next-page">Next</button></a>
+                                                            <% }%>
+
+            </nav>
 
 
 

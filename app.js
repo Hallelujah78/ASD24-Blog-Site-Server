@@ -9,6 +9,7 @@ app.set("view-engine", "ejs");
 
 let blogPosts = [];
 let numPostsPerPage = 5;
+let numPagesToDisplay = 5;
 
 function makeDummyPosts(numPosts, blogPosts) {
   for (let i = 0; i < numPosts; i++) {
@@ -49,6 +50,8 @@ app.get("/", (req, res) => {
     numPostsPerPage: numPostsPerPage,
     blogPosts: getDisplayPosts(numPostsPerPage, pagenum, blogPosts),
     totalPosts: blogPosts.length,
+    numPagesToDisplay,
+    pagenum: +pagenum,
   });
 });
 
