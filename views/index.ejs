@@ -50,8 +50,8 @@
     <% let pagesToRightOfPageNum=end - pagenum%>
     <% let addToEnd=Math.abs(pagesToLeftOfPageNum - pageOffset)%>
     <% let subtractFromStart = Math.abs(pagesToRightOfPageNum - pageOffset) %>
-    <% start = start - subtractFromStart %>
-    <% end = end + addToEnd %>
+    <% start = start - subtractFromStart > 0 ? start - subtractFromStart : 1 %>
+    <% end = end + addToEnd <= pagesRequired ? end+addToEnd : pagesRequired %>
 
     <!-- render the page numbers -->
     <% for(let i=start; i<=end ; i++){ %>
