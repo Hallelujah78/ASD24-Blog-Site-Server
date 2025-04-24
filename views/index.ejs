@@ -2,89 +2,93 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Best Blog</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Best Blog</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <nav><a href="/">Home</a></nav>
-    <!-- 
+  <nav><a href="/">Home</a></nav>
+  <!-- 
     Post title
     Post content
     Post Author
     Post Date
     -->
-    <% blogPosts.forEach(post=> { %>
-        <article>
-            <h2>
-                <%= post.title %>
-            </h2>
-            <p>
-                <%= post.content %>
-            </p>
-            <p>
-                <%= post.author %>
-            </p>
-            <p>
-                <%= post.datetime %>
-            </p>
-        </article>
-        <% }) %>
+  <% blogPosts.forEach(post=> { %>
+  <article>
+    <h2>
+      <%= post.title %>
+    </h2>
+    <p>
+      <%= post.content %>
+    </p>
+    <p>
+      <%= post.author %>
+    </p>
+    <p>
+      <%= post.datetime %>
+    </p>
+  </article>
+  <% }) %>
 
-            <!-- pagination below here -->
-            <nav class="pagination-container">
-                <% if(pagenum==1){ %>
-                    <a href="/?pagenum=<%= pagenum-1%>"><button disabled id="previous-page">Previous</button></a>
+  <!-- pagination below here -->
+  <nav class="pagination-container">
+    <% if(pagenum==1){ %>
+    <a href="/?pagenum=<%= pagenum-1%>"><button disabled id="previous-page">Previous</button></a>
 
-                    <% } else { %>
-                        <a href="/?pagenum=<%= pagenum-1%>" disabled><button id="previous-page">Previous</button></a>
-                        <% }%>
+    <% } else { %>
+    <a href="/?pagenum=<%= pagenum-1%>" disabled><button id="previous-page">Previous</button></a>
+    <% }%>
+
+    <% let pagesRequired=Math.ceil(totalPosts/numPostsPerPage) %>
+    <% let pageOffset=Math.floor(numPagesToDisplay/2) %>
+    <% let start=pagenum - pageOffset> 0 ? pagenum - pageOffset : 1%>
+    <% let end=pagenum + pageOffset <=pagesRequired ? pagenum + pageOffset : pagesRequired %>
+    <% let pagesToLeftOfPageNum=pagenum - start %>
+    <% let pagesToRightOfPageNum=end - pagenum%>
+    <% let addToEnd=Math.abs(pagesToLeftOfPageNum - pageOffset)%>
+    <% let subtractFromStart = Math.abs(pagesToRightOfPageNum - pageOffset) %>
+    <% start = start - subtractFromStart %>
+    <% end = end + addToEnd %>
+
+    <!-- render the page numbers -->
+    <% for(let i=start; i<=end ; i++){ %>
+    <a href="/?pagenum=<%=i%>">
+      <button>
+        <%= i%>
+      </button>
+    </a>
+    <% } %>
+
+    <% if(pagenum==pagesRequired){ %>
+    <a href="/?pagenum=<%= pagenum+1%>"><button disabled id="next-page">Next</button></a>
+
+    <% } else { %>
+    <a href="/?pagenum=<%= pagenum+1%>"><button id="next-page">Next</button></a>
+    <% }%>
+
+  </nav>
 
 
-                            <%let pageOffset=Math.ceil(totalPosts/numPostsPerPage)%>
-                                <% let start=pagenum - Math.floor(numPagesToDisplay/2)%>
-                                    <% let end=pagenum + Math.floor(numPagesToDisplay/2) <=pageOffset ?
-                                        pagenum+Math.floor(numPagesToDisplay/2):pageOffset%>
-                                        <!-- render the page numbers -->
-                                        <% for(let i=start>=1?start:1; i<=end ; i++){ %>
-                                                <a href="/?pagenum=<%=i%>">
-                                                    <button>
-                                                        <%= i%>
-                                                    </button>
-                                                </a>
-                                                <% } %>
 
-                                                    <% if(pagenum==pageOffset){ %>
-                                                        <a href="/?pagenum=<%= pagenum+1%>"><button disabled
-                                                                id="next-page">Next</button></a>
-
-                                                        <% } else { %>
-                                                            <a href="/?pagenum=<%= pagenum+1%>"><button
-                                                                    id="next-page">Next</button></a>
-                                                            <% }%>
-
-            </nav>
-
-
-
-            <form action="/new-blog-post" method="post">
-                <!-- 
+  <form action="/new-blog-post" method="post">
+    <!-- 
         Author 
         Title
         Content
         Submit
         -->
-                <h2>Make new blog post</h2>
-                <label for="author">Author:</label>
-                <input type="text" name="author" id="author">
-                <label for="title">Title:</label>
-                <input type="text" name="title" id="title">
-                <label for="content">Content:</label>
-                <textarea name="content" id="content"></textarea>
-                <button type="submit" id="submit">Submit Post</button>
-            </form>
+    <h2>Make new blog post</h2>
+    <label for="author">Author:</label>
+    <input type="text" name="author" id="author">
+    <label for="title">Title:</label>
+    <input type="text" name="title" id="title">
+    <label for="content">Content:</label>
+    <textarea name="content" id="content"></textarea>
+    <button type="submit" id="submit">Submit Post</button>
+  </form>
 </body>
 <script src="script.js"></script>
 
