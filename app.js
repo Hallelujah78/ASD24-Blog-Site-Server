@@ -1,13 +1,22 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+import express from "express";
+import bodyParser from "body-parser";
+import mongoose from "mongoose";
+
+import blogRouter from "./routes/blogRoutes.js";
+
+// Mongoose and MongoDB
+mongoose
+  .connect("mongodb://localhost:27017/blogDatabase")
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error: ", err));
 
 const PORT = 3001;
-app = express();
+const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view-engine", "ejs");
 
-let blogPosts = [];
+const blogPosts = [];
 let numPostsPerPage = 5;
 let numPagesToDisplay = 5;
 
@@ -59,19 +68,21 @@ app.get("/", (req, res) => {
 //     res.render("index.ejs");
 // });
 
-app.post("/new-blog-post", (req, res) => {
-  console.log(req.body.author);
-  console.log(req.body.title);
-  console.log(req.body.content);
-  console.log(new Date().toLocaleString());
-  blogPosts.push({
-    author: req.body.author,
-    title: req.body.title,
-    content: req.body.content,
-    datetime: new Date().toLocaleString(),
-  });
-  res.redirect("/");
-});
+app.use("/api/v1/blogs", blogRouter);
+
+// app.post("/new-blog-post", (req, res) => {
+//   console.log(req.body.author);
+//   console.log(req.body.title);
+//   console.log(req.body.content);
+//   console.log(new Date().toLocaleString());
+//   blogPosts.push({
+//     author: req.body.author,
+//     title: req.body.title,
+//     content: req.body.content,
+//     datetime: new Date().toLocaleString(),
+//   });
+//   res.redirect("/");
+// });
 
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
