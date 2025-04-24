@@ -56,7 +56,7 @@
     <!-- render the page numbers -->
     <% for(let i=start; i<=end ; i++){ %>
     <a href="/?pagenum=<%=i%>">
-      <button>
+      <button class="<%= pagenum === i ? "active-page" : ""  %>">
         <%= i%>
       </button>
     </a>
