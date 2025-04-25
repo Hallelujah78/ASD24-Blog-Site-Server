@@ -2,6 +2,9 @@ import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 
+// Import config.
+import { PORT } from "./config/blogConfig.js";
+
 import blogRouter from "./routes/blogRoutes.js";
 
 // Mongoose and MongoDB
@@ -10,79 +13,13 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error: ", err));
 
-const PORT = 3001;
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view-engine", "ejs");
 
-const blogPosts = [];
-let numPostsPerPage = 5;
-let numPagesToDisplay = 5;
-
-function makeDummyPosts(numPosts, blogPosts) {
-  for (let i = 0; i < numPosts; i++) {
-    blogPosts.push({
-      author: "Author: " + i,
-      title: "test" + i,
-      content: "Text",
-      datetime: new Date().toLocaleString(),
-    });
-  }
-}
-makeDummyPosts(98, blogPosts);
-
-function getDisplayPosts(numPostsPerPage, pagenum, blogPosts) {
-  /*
-    pagenum = 1
-    posts 0-4
-
-    pagenum = 2
-    posts 5-9
-
-    pagenum = 10
-    posts (10-1)*5 - 10*5-1
-    45-49
-    */
-  let start = (pagenum - 1) * numPostsPerPage;
-  let end = pagenum * numPostsPerPage;
-  return blogPosts.slice().reverse().slice(start, end);
-}
-
-app.get("/", (req, res) => {
-  // res.sendFile("index.html", {root: __dirname});
-  let pagenum;
-  if (!req.query.pagenum) pagenum = 1;
-  else pagenum = req.query.pagenum;
-  console.log(req.query.pagenum);
-  res.render("index.ejs", {
-    numPostsPerPage: numPostsPerPage,
-    blogPosts: getDisplayPosts(numPostsPerPage, pagenum, blogPosts),
-    totalPosts: blogPosts.length,
-    numPagesToDisplay,
-    pagenum: +pagenum,
-  });
-});
-
-// app.get('/page', (req, res) => {
-//     res.render("index.ejs");
-// });
-
-app.use("/api/v1/blogs", blogRouter);
-
-// app.post("/new-blog-post", (req, res) => {
-//   console.log(req.body.author);
-//   console.log(req.body.title);
-//   console.log(req.body.content);
-//   console.log(new Date().toLocaleString());
-//   blogPosts.push({
-//     author: req.body.author,
-//     title: req.body.title,
-//     content: req.body.content,
-//     datetime: new Date().toLocaleString(),
-//   });
-//   res.redirect("/");
-// });
+// Router for handling blog CRUD ops.
+app.use("/", blogRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
