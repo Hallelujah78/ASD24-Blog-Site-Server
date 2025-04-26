@@ -21,6 +21,11 @@ app.set("view-engine", "ejs");
 // Router for handling blog CRUD ops.
 app.use("/", blogRouter);
 
+app.get("/auth", (req, res) => {
+  // Send the response, a rendered auth.ejs page.
+  res.render("auth.ejs");
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
 });
